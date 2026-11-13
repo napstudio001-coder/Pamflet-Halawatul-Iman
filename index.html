@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Pamflet - Majelis Halawatul Iman</title>
+    <!-- Menggunakan Google Fonts agar tipografi mirip dengan referensi -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: #f4f7f6;
+            background-color: #e9ecef;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -21,265 +23,431 @@
             min-height: 100vh;
         }
 
-        /* Panel Kontrol / Dasbor Input */
+        /* ================= PANEL DASBOR INPUT ================= */
         .control-panel {
             background: #ffffff;
-            padding: 20px 30px;
+            padding: 20px 25px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             width: 100%;
-            max-width: 450px;
+            max-width: 480px;
             text-align: center;
         }
 
         .control-panel h2 {
-            font-size: 18px;
-            color: #1b4332;
-            margin-bottom: 15px;
+            font-size: 16px;
+            color: #14532d;
+            margin-bottom: 12px;
         }
 
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-align: left;
         }
 
         .input-group label {
             display: block;
-            font-size: 13px;
-            color: #555;
-            margin-bottom: 5px;
-            font-weight: 600;
+            font-size: 12px;
+            color: #444;
+            margin-bottom: 4px;
+            font-weight: 700;
         }
 
         .input-group input {
             width: 100%;
             padding: 10px 12px;
-            border: 1px solid #ccc;
+            border: 1.5px solid #cbd5e1;
             border-radius: 8px;
             font-size: 14px;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #14532d;
         }
 
         .btn-print {
-            background-color: #2d6a4f;
+            background-color: #14532d;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 11px 20px;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 700;
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            transition: background 0.3s;
+            transition: background 0.2s;
         }
 
         .btn-print:hover {
-            background-color: #1b4332;
+            background-color: #0f3f22;
         }
 
-        /* Area Pamflet (Ukuran Proporsional Poster/Story) */
-        .pamflet-container {
-            width: 450px;
-            height: 680px;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        /* ================= KANVAS PAMFLET (RASIO 4:5 SEPERTI CONTOH) ================= */
+        .pamflet-canvas {
+            width: 480px;
+            height: 600px;
+            background-color: #ffffff;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 30px 25px;
-            text-align: center;
-            border: 1px solid #e0e0e0;
+            padding: 32px 0 24px 0;
         }
 
-        /* Latar belakang ornamen transparan */
-        .pamflet-container::before {
-            content: "";
+        /* Aksen Daun/Blur Hijau di Pojok Kanan Atas & Kiri Bawah (Meniru Referensi) */
+        .blur-top-right {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle, rgba(45,106,79,0.05) 0%, rgba(27,67,50,0.1) 100%);
+            top: -40px;
+            right: -40px;
+            width: 180px;
+            height: 110px;
+            background: radial-gradient(circle, #15803d 0%, #14532d 60%, transparent 100%);
+            filter: blur(18px);
+            opacity: 0.85;
             z-index: 1;
         }
 
-        .pamflet-container > * {
+        .blur-bottom-left {
+            position: absolute;
+            bottom: -45px;
+            left: -45px;
+            width: 180px;
+            height: 110px;
+            background: radial-gradient(circle, #15803d 0%, #14532d 60%, transparent 100%);
+            filter: blur(18px);
+            opacity: 0.85;
+            z-index: 1;
+        }
+
+        /* Pattern Geometris Samar di Latar */
+        .bg-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(#14532d 0.75px, transparent 0.75px);
+            background-size: 24px 24px;
+            opacity: 0.04;
+            z-index: 1;
+        }
+
+        .pamflet-canvas > * {
             position: relative;
             z-index: 2;
         }
 
-        /* Header / Logo */
-        .pamflet-header {
+        /* 1. HEADER HORIZONTAL (Logo Kiri + Teks Kanan) */
+        .header-section {
             display: flex;
-            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 0 30px;
         }
 
         .logo-img {
-            width: 65px;
-            height: 65px;
+            width: 54px;
+            height: 54px;
             object-fit: contain;
             border-radius: 50%;
-            margin-bottom: 6px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-            border: 2px solid #d4af37;
+            border: 1.5px solid #ca8a04;
+            background: #fff;
         }
 
-        .org-name {
-            font-size: 12px;
-            font-weight: bold;
-            color: #1b4332;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Judul Utama */
-        .pamflet-title-box {
-            background-color: #1b4332;
-            color: white;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            display: inline-block;
-            margin: 0 auto 10px auto;
-        }
-
-        .main-title {
-            font-size: 26px;
-            font-weight: 800;
-            color: #1b4332;
-            line-height: 1.2;
-            margin-bottom: 5px;
-        }
-
-        .sub-title {
-            font-size: 13px;
-            color: #d4af37;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        /* Kotak Tanggal Dinamis */
-        .date-badge {
-            background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(170,124,17,0.3);
-            margin: 10px auto;
-            display: inline-block;
-        }
-
-        /* Detail Acara */
-        .event-details {
-            background: rgba(45, 106, 79, 0.08);
-            border-left: 4px solid #2d6a4f;
-            padding: 12px 15px;
-            border-radius: 0 8px 8px 0;
+        .header-text {
             text-align: left;
+        }
+
+        .arabic-sub {
+            font-family: 'Amiri', serif;
+            font-size: 15px;
+            color: #14532d;
+            line-height: 1.1;
+        }
+
+        .org-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            font-weight: 900;
+            color: #1e293b;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .org-loc {
+            font-size: 8.5px;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* 2. JUDUL UTAMA (Banner Hijau + Teks Besar Bertumpuk) */
+        .hero-section {
+            text-align: center;
+            padding: 0 25px;
+            margin-top: 4px;
+        }
+
+        .green-banner {
+            background-color: #14532d;
+            color: #ffffff;
+            display: inline-block;
+            padding: 5px 24px;
             font-size: 13px;
-            color: #333;
-            line-height: 1.5;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
         }
 
-        .event-details p {
-            margin-bottom: 4px;
+        .big-title-top {
+            font-family: 'Playfair Display', serif;
+            font-size: 44px;
+            font-weight: 900;
+            color: #14532d;
+            line-height: 0.95;
+            letter-spacing: -0.5px;
         }
 
-        .event-details p:last-child {
+        .big-title-bottom {
+            font-family: 'Playfair Display', serif;
+            font-size: 40px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #b48a3e 0%, #15803d 45%, #14532d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.05;
+        }
+
+        .masyayikh-subtitle {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #9a6b1b;
+            margin-top: 6px;
+        }
+
+        /* 3. AREA KOTAK INFORMASI ASIMETRIS (Meniru Kotak Emas & Hijau) */
+        .info-cards-wrapper {
+            position: relative;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Pill Tanggal di Sisi Kiri (Warna Emas Kecokelatan) */
+        .gold-date-pill {
+            align-self: flex-start;
+            background: linear-gradient(135deg, #c28e2c 0%, #a17018 100%);
+            color: #ffffff;
+            padding: 8px 26px 8px 32px;
+            border-radius: 0 25px 25px 0;
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(161, 112, 24, 0.3);
+            margin-bottom: 10px;
+            z-index: 3;
+        }
+
+        /* Kotak Besar Jadwal & Lokasi di Sisi Kanan (Warna Hijau Tua + Aksen Emas) */
+        .green-schedule-box {
+            align-self: flex-end;
+            width: 88%;
+            background: linear-gradient(135deg, #14532d 0%, #166534 100%);
+            color: #ffffff;
+            border-radius: 28px 0 0 28px;
+            padding: 16px 24px 16px 28px;
+            text-align: left;
+            box-shadow: -4px 6px 18px rgba(20, 83, 45, 0.2);
+            border-top: 4px solid #c28e2c;
+        }
+
+        .schedule-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 6px;
+            font-size: 12.5px;
+            line-height: 1.4;
+        }
+
+        .schedule-row:last-child {
             margin-bottom: 0;
         }
 
-        /* Footer Pamflet */
-        .pamflet-footer {
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-            font-size: 11px;
-            color: #666;
+        .schedule-label {
+            width: 75px;
+            font-weight: 700;
+            color: #fde047;
+            flex-shrink: 0;
+        }
+
+        .schedule-value {
+            font-weight: 600;
+            color: #f8fafc;
+        }
+
+        /* 4. FOOTER MEDIA SOSIAL */
+        .footer-section {
+            padding: 0 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 8px;
         }
 
-        .social-media {
-            font-weight: 600;
-            color: #1b4332;
+        .follow-box {
+            text-align: left;
         }
 
-        /* Sembunyikan panel kontrol saat dicetak/disimpan */
+        .follow-top {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .follow-badge {
+            background-color: #2563eb;
+            color: white;
+            font-size: 9px;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .follow-desc {
+            font-size: 9.5px;
+            color: #475569;
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+
+        .brand-footer {
+            text-align: right;
+        }
+
+        .brand-footer span {
+            display: block;
+            font-size: 9px;
+            color: #15803d;
+            font-weight: 700;
+        }
+
+        .brand-footer strong {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            color: #14532d;
+            font-weight: 900;
+        }
+
+        /* PENGATURAN CETAK / PDF AGAR UKURAN PAS */
         @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
             .control-panel {
                 display: none;
             }
-            body {
-                background: white;
-                padding: 0;
-            }
-            .pamflet-container {
+            .pamflet-canvas {
                 box-shadow: none;
-                border: none;
+                margin: 0 auto;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Panel Input Pengguna -->
+    <!-- DASBOR INPUT TANGGAL -->
     <div class="control-panel">
-        <h2>Atur Tanggal Pamflet</h2>
+        <h2>Dasbor Pembuat Pamflet</h2>
         <div class="input-group">
-            <label for="inputTanggal">Masukkan Tanggal Acara:</label>
-            <input type="text" id="inputTanggal" placeholder="Contoh: 18 Rajab 1447 Hijriyah / 25 November 2026" value="18 Rajab 1447 Hijriyah">
+            <label for="inputTanggal">Masukkan Tanggal, Bulan, Tahun (Lalu tekan Enter / otomatis berubah):</label>
+            <input type="text" id="inputTanggal" placeholder="Contoh: Senin, 16 November 2026 / 6 Jumadil Akhir 1448 H" value="Senin, 16 November 2026">
         </div>
-        <button class="btn-print" onclick="window.print()">Cetak / Simpan ke PDF</button>
+        <button class="btn-print" onclick="window.print()">Simpan PDF / Cetak Pamflet</button>
     </div>
 
-    <!-- Tampilan Visual Pamflet -->
-    <div class="pamflet-container" id="pamfletArea">
-        
-        <div class="pamflet-header">
-            <!-- Logo Majelis Permanen (Embedded)[span_2](start_span)[span_2](end_span) -->
-            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAQAFAADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD+/gjwS/BLLiLAz4+aAMwP8AEV8L9f8AKo0QY4lP08oZf8M4r4X/wA/Ff8AIZ/+Jr4X/wA/Ff8AIZ/+Jr+/uY9E+Yj9gZ5+fD/AL9t8P4X7yT6Nn4Zg/M54b9f5f6v4r4K4X1/qvhTj/XfBf8/wAv+/v/AL8s++36l8X/AITr4X/iL9P+CfhD8P9d8F/z/wAF/wBv/LvhP/AALwfhT414X0/wDCH8I/CPyXfLfgv+WfhH4T5P8A/C9X/9k=" alt="Logo Majelis Halawatul Iman" class="logo-img">
-            <div class="org-name">Majelis Halawatul Iman (Legine Iman)</div>
+    <!-- HASIL DESAIN PAMFLET -->
+    <div class="pamflet-canvas" id="pamfletArea">
+        <!-- Ornamen Sudut & Pola -->
+        <div class="blur-top-right"></div>
+        <div class="blur-bottom-left"></div>
+        <div class="bg-pattern"></div>
+
+        <!-- 1. Header Atas -->
+        <div class="header-section">
+            <!-- Pastikan file logo.png ada di repository GitHub Anda -->
+            <img src="logo.png" alt="Logo Majelis" class="logo-img">
+            <div class="header-text">
+                <div class="arabic-sub">مَجْلِسُ حَلَاوَةِ الْإِيْمَانْ</div>
+                <div class="org-title">MAJELIS HALAWATUL IMAN</div>
+                <div class="org-loc">PENDOPO HAJI HANAFI CENTER • DEMPET - DEMAK</div>
+            </div>
         </div>
 
-        <div class="center-content">
-            <div class="pamflet-title-box">RUTINAN SENIN MALAM SELASA</div>
-            <div class="main-title">Majelis Halawatul Iman</div>
-            <div class="sub-title">Bersama Masyayikh Majelis Halawatul Iman</div>
-
-            <!-- Bagian Tanggal yang Berubah Otomatis -->
-            <div class="date-badge" id="displayTanggal">18 Rajab 1447 Hijriyah</div>
+        <!-- 2. Judul Besar Tengah -->
+        <div class="hero-section">
+            <div class="green-banner">Rutinan Senin Malam Selasa</div>
+            <div class="big-title-top">Halawatul</div>
+            <div class="big-title-bottom">Iman</div>
+            <div class="masyayikh-subtitle">Bersama Masyayikh Majelis Halawatul Iman (Legine Iman)</div>
         </div>
 
-        <div class="event-details">
-            <p><strong>📅 Hari:</strong> Senin</p>
-            <p><strong>⏰ Jam:</strong> 20.00 WIB - Selesai</p>
-            <p><strong>📍 Tempat:</strong> Pendopo Haji Hanafi Center, Menawan Merak Kec. Dempet Kab. Demak</p>
+        <!-- 3. Kotak Tanggal (Emas) & Jadwal Lengkap (Hijau) -->
+        <div class="info-cards-wrapper">
+            <!-- Tanggal Dinamis -->
+            <div class="gold-date-pill" id="displayTanggal">Senin, 16 November 2026</div>
+
+            <!-- Rincian Waktu & Tempat -->
+            <div class="green-schedule-box">
+                <div class="schedule-row">
+                    <div class="schedule-label">Hari</div>
+                    <div class="schedule-value">: Senin Malam Selasa</div>
+                </div>
+                <div class="schedule-row">
+                    <div class="schedule-label">Waktu</div>
+                    <div class="schedule-value">: Pukul 20.00 WIB - Selesai</div>
+                </div>
+                <div class="schedule-row">
+                    <div class="schedule-label">Tempat</div>
+                    <div class="schedule-value">: Pendopo Haji Hanafi Center, Menawan Merak Kec. Dempet Kab. Demak</div>
+                </div>
+            </div>
         </div>
 
-        <div class="pamflet-footer">
-            <span>Ikuti Informasi Kami</span>
-            <span class="social-media">@halawatuliman</span>
-        </div>
+        <!-- 4. Footer Bawah -->
+        <div class="footer-section">
+            <div class="follow-box">
+                <div class="follow-top">
+                    Follow us : <span class="follow-badge">Ikuti</span>
+                </div>
+                <div class="follow-desc">
+                    Media Resmi Majelis Halawatul Iman<br>
+                    <strong>@majelishalawatuliman</strong>
+                </div>
+            </div>
 
+            <div class="brand-footer">
+                <span>Majelis Rutinan</span>
+                <strong>Legine Iman</strong>
+            </div>
+        </div>
     </div>
 
-    <!-- Skrip JavaScript untuk Sinkronisasi Teks -->
     <script>
         const inputTanggal = document.getElementById('inputTanggal');
         const displayTanggal = document.getElementById('displayTanggal');
 
         inputTanggal.addEventListener('input', function() {
-            if(inputTanggal.value.trim() !== "") {
-                displayTanggal.innerText = inputTanggal.value;
-            } else {
-                displayTanggal.innerText = "(Tanggal Belum Diisi)";
-            }
+            const val = inputTanggal.value.trim();
+            displayTanggal.innerText = val !== "" ? val : "Senin Malam Selasa";
         });
     </script>
 

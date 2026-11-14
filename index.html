@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Pamflet - Majelis Halawatul Iman</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>Pamflet - Majelis Halawatul Iman</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -13,308 +13,403 @@
         }
 
         body {
-            background-color: #1b4332;
+            background-color: #0f172a;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            padding: 20px;
+            padding: 20px 12px 60px 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
 
-        /* Dasbor Input */
-        .control-panel {
-            background: #ffffff;
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
+        /* DASBOR KONTROL INPUT (TIDAK IKUT TER-SCREENSHOT) */
+        .dashboard-bar {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 16px 20px;
+            border-radius: 14px;
             width: 100%;
-            max-width: 440px;
-            text-align: center;
+            max-width: 450px;
+            margin-bottom: 24px;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
-        .control-panel h2 {
-            font-size: 15px;
-            color: #1b4332;
-            margin-bottom: 8px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 9px 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+        .dashboard-bar h3 {
             font-size: 13px;
-            margin-bottom: 8px;
+            color: #fde047;
+            margin-bottom: 12px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-row {
+            margin-bottom: 10px;
+        }
+
+        .form-row label {
+            display: block;
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .form-row input[type="text"] {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: #ffffff;
+            font-size: 13px;
             outline: none;
         }
 
-        .btn-print {
-            background-color: #2d6a4f;
-            color: white;
-            border: none;
-            padding: 9px 15px;
-            font-size: 13px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
+        .form-row input[type="text"]:focus {
+            border-color: #22c55e;
         }
 
-        .btn-print:hover {
-            background-color: #1b4332;
+        .form-row input[type="file"] {
+            font-size: 11px;
+            color: #cbd5e1;
         }
 
-        /* Kanvas Pamflet Ukuran Proporsional */
-        .pamflet-canvas {
-            width: 440px;
-            height: 620px;
-            background-color: #ffffff;
+        .hint-text {
+            font-size: 11px;
+            color: #4ade80;
+            text-align: center;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* ================= KANVAS PAMFLET UTAMA ================= */
+        .pamflet-frame {
+            width: 450px;
+            height: 650px;
+            background: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1000&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 28px 24px 22px 24px;
-            border-radius: 12px;
+            padding: 24px 20px 20px 20px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+            border-radius: 6px;
         }
 
-        /* Ornamen Sudut Lembut */
-        .pamflet-canvas::before {
-            content: "";
+        @media (max-width: 470px) {
+            .pamflet-frame {
+                width: 100%;
+                max-width: 420px;
+                height: 610px;
+            }
+        }
+
+        .bg-overlay {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at top right, rgba(27,67,50,0.06) 0%, transparent 60%),
-                        radial-gradient(circle at bottom left, rgba(212,175,55,0.08) 0%, transparent 60%);
+            inset: 0;
+            background: linear-gradient(135deg, rgba(20, 83, 45, 0.75) 0%, rgba(15, 60, 30, 0.85) 100%);
             z-index: 1;
+            pointer-events: none;
         }
 
-        .pamflet-canvas > * {
+        .pamflet-frame > * {
             position: relative;
             z-index: 2;
         }
 
-        /* Header Horizontal: Logo di Kiri, Teks di Kanan */
-        .header-section {
+        /* 1. HEADER ATAS */
+        .header-top {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 12px;
-            border-bottom: 1.5px solid #f1f5f9;
-            padding-bottom: 12px;
-        }
-
-        .logo-img {
-            width: 52px;
-            height: 52px;
-            object-fit: contain;
-            border-radius: 50%;
-            border: 2px solid #d4af37;
-            background: #fff;
-            flex-shrink: 0;
-        }
-
-        .header-text {
-            text-align: left;
-        }
-
-        .arabic-sub {
-            font-family: 'Amiri', serif;
-            font-size: 14px;
-            color: #1b4332;
-            line-height: 1.1;
-        }
-
-        .org-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 15px;
-            font-weight: 900;
-            color: #0f172a;
-            letter-spacing: 0.3px;
-        }
-
-        .org-loc {
-            font-size: 8px;
-            font-weight: 700;
-            color: #64748b;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin-top: 2px;
-        }
-
-        /* Bagian Tengah / Judul Utama */
-        .hero-section {
             text-align: center;
-            margin: 5px 0;
         }
 
-        .green-banner {
-            background-color: #1b4332;
-            color: #ffffff;
-            display: inline-block;
-            padding: 4px 18px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-        }
-
-        .main-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            font-weight: 900;
-            color: #1b4332;
-            line-height: 1.1;
+        .logo-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fde047;
+            background: #ffffff;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.4);
             margin-bottom: 4px;
         }
 
-        .masyayikh-subtitle {
-            font-size: 12px;
-            font-weight: 700;
-            color: #b8860b;
-        }
-
-        /* Kotak Info: Tanggal & Jadwal */
-        .info-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .gold-date-pill {
-            align-self: flex-start;
-            background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+        .arabic-header {
+            font-family: 'Amiri', serif;
+            font-size: 19px;
             color: #ffffff;
-            padding: 7px 22px;
-            border-radius: 0 20px 20px 0;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: 0 3px 10px rgba(170,124,17,0.3);
-        }
-
-        .schedule-box {
-            background: rgba(27, 67, 50, 0.04);
-            border-left: 4px solid #1b4332;
-            padding: 12px 16px;
-            border-radius: 0 8px 8px 0;
-            text-align: left;
-            font-size: 12px;
-            color: #333;
-            line-height: 1.5;
-        }
-
-        .schedule-row {
-            display: flex;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.7);
             margin-bottom: 3px;
         }
 
-        .schedule-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .schedule-label {
-            width: 65px;
-            font-weight: 700;
-            color: #1b4332;
-        }
-
-        .schedule-val {
-            font-weight: 600;
-            color: #1e293b;
-        }
-
-        /* Footer */
-        .footer-section {
-            border-top: 1px solid #f1f5f9;
-            padding-top: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .hadirilah-badge {
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(253, 224, 71, 0.5);
+            color: #fde047;
+            padding: 3px 16px;
+            border-radius: 20px;
             font-size: 10px;
-            color: #64748b;
-        }
-
-        .social-media {
             font-weight: 700;
-            color: #1b4332;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
         }
 
-        @media print {
-            body { background: white; padding: 0; }
-            .control-panel { display: none; }
-            .pamflet-canvas { box-shadow: none; margin: 0 auto; }
+        /* 2. TIPOGRAFI JUDUL UTAMA */
+        .hero-title-section {
+            text-align: center;
+            margin: 2px 0;
+        }
+
+        .main-title-1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.05;
+            text-shadow: 0 3px 12px rgba(0,0,0,0.7);
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .main-title-2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 900;
+            color: #fde047;
+            line-height: 1.1;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.7);
+            text-transform: uppercase;
+        }
+
+        .script-subtitle {
+            font-family: 'Playfair Display', italic;
+            font-size: 21px;
+            color: #ffffff;
+            margin-top: -2px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+            font-weight: 700;
+        }
+
+        /* 3. KARTU INFORMASI PUTIH MODERN DI BAWAH */
+        .info-card-container {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 14px 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .shohibul-pill-wrap {
+            margin-top: -26px;
+            margin-bottom: 10px;
+        }
+
+        .shohibul-label {
+            background-color: #14532d;
+            color: #fde047;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 10px;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+
+        .shohibul-name {
+            background: linear-gradient(135deg, #fde047 0%, #ca8a04 100%);
+            color: #14532d;
+            font-size: 14px;
+            font-weight: 900;
+            padding: 5px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 3px 10px rgba(202, 138, 4, 0.35);
+            border: 1px solid #fef08a;
+        }
+
+        .details-grid {
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 8px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: flex-start;
+            font-size: 11.5px;
+            color: #334155;
+            line-height: 1.35;
+        }
+
+        .detail-icon {
+            width: 20px;
+            font-weight: bold;
+            color: #15803d;
+            flex-shrink: 0;
+        }
+
+        .detail-label {
+            width: 85px;
+            font-weight: 700;
+            color: #1e293b;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .open-public-banner {
+            background: linear-gradient(90deg, #14532d 0%, #166534 50%, #14532d 100%);
+            color: #fde047;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 5px;
+            border-radius: 6px;
+            letter-spacing: 1px;
+            margin-top: 8px;
+            text-transform: uppercase;
+            border: 1px solid #fde047;
+        }
+
+        /* 4. FOOTER BAWAH */
+        .footer-bottom {
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        .footer-present {
+            font-size: 8.5px;
+            color: rgba(255, 255, 255, 0.85);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .footer-org {
+            font-size: 11px;
+            color: #ffffff;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.7);
         }
     </style>
 </head>
 <body>
 
-    <!-- Panel Kontrol Input Tanggal -->
-    <div class="control-panel">
-        <h2>Atur Tanggal Pamflet</h2>
-        <div class="input-group">
-            <input type="text" id="inputTanggal" placeholder="Contoh: 18 Rajab 1447 Hijriyah" value="18 Rajab 1447 Hijriyah">
+    <!-- DASBOR KONTROL INPUT -->
+    <div class="dashboard-bar">
+        <h3>Dasbor Pengaturan Pamflet</h3>
+        <div class="form-row">
+            <label for="inputTanggal">Ketik Tanggal & Waktu Acara:</label>
+            <input type="text" id="inputTanggal" placeholder="Contoh: Senin, 16 November 2026 / 20.00 WIB" value="Senin, 16 November 2026 (20.00 WIB)">
         </div>
-        <button class="btn-print" onclick="window.print()">Cetak / Simpan PDF</button>
+        <div class="form-row">
+            <label for="inputShohibul">Ketik Shohibul Majelis / Pimpinan:</label>
+            <input type="text" id="inputShohibul" placeholder="Contoh: Masyayikh & Keluarga Besar" value="Masyayikh Majelis Halawatul Iman">
+        </div>
+        <div class="form-row">
+            <label for="uploadLogo">Upload Logo Majelis dari HP Anda:</label>
+            <input type="file" id="uploadLogo" accept="image/*">
+        </div>
+        <div class="hint-text">Siap Screenshot!</div>
     </div>
 
-    <!-- Tampilan Pamflet -->
-    <div class="pamflet-canvas">
-        
-        <!-- Header Logo & Nama -->
-        <div class="header-section">
-            <!-- Ganti 'logo.png' dengan 'logo.jpg' jika file Anda berekstensi .jpg -->
-            <img src="logo.png" alt="Logo Majelis" class="logo-img" onerror="this.src='https://via.placeholder.com/52?text=Logo'">
-            <div class="header-text">
-                <div class="arabic-sub">مَجْلِسُ حَلَاوَةِ الْإِيْمَانْ</div>
-                <div class="org-title">MAJELIS HALAWATUL IMAN</div>
-                <div class="org-loc">LEGINE IMAN • DEMPET, DEMAK</div>
+    <!-- KANVAS PAMFLET UTAMA -->
+    <div class="pamflet-frame" id="pamflet">
+        <div class="bg-overlay"></div>
+
+        <!-- 1. Header Atas -->
+        <div class="header-top">
+            <div class="logo-row">
+                <img src="https://via.placeholder.com/150/ffffff/14532d?text=LOGO" id="logoPreview" alt="Logo" class="logo-circle">
             </div>
+            <div class="arabic-header">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+            <div class="hadirilah-badge">✨ HADIRILAH • DENGAN MENGHARAP SYAFA'AT ROSULILLAH ✨</div>
         </div>
 
-        <!-- Judul Utama -->
-        <div class="hero-section">
-            <div class="green-banner">RUTINAN SENIN MALAM SELASA</div>
-            <div class="main-title">Majelis Halawatul Iman</div>
-            <div class="masyayikh-subtitle">Bersama Masyayikh Majelis Halawatul Iman</div>
+        <!-- 2. Tipografi Judul Utama -->
+        <div class="hero-title-section">
+            <div class="main-title-1">RUTINAN SENIN</div>
+            <div class="main-title-2">MALAM SELASA</div>
+            <div class="script-subtitle">Majelis Halawatul Iman</div>
         </div>
 
-        <!-- Tanggal & Detail Waktu Tempat -->
-        <div class="info-wrapper">
-            <div class="gold-date-pill" id="displayTanggal">18 Rajab 1447 Hijriyah</div>
-            
-            <div class="schedule-box">
-                <div class="schedule-row">
-                    <span class="schedule-label">Hari</span>
-                    <span class="schedule-val">: Senin Malam Selasa</span>
-                </div>
-                <div class="schedule-row">
-                    <span class="schedule-label">Waktu</span>
-                    <span class="schedule-val">: Pukul 20.00 WIB - Selesai</span>
-                </div>
-                <div class="schedule-row">
-                    <span class="schedule-label">Tempat</span>
-                    <span class="schedule-val">: Pendopo Haji Hanafi Center, Menawan Merak Kec. Dempet Kab. Demak</span>
+        <!-- 3. Kartu Informasi Putih Modern di Bawah -->
+        <div class="info-card-container">
+            <div class="shohibul-pill-wrap">
+                <div class="shohibul-label">Shohibul Majelis :</div>
+                <div>
+                    <span class="shohibul-name" id="displayShohibul">Masyayikh Majelis Halawatul Iman</span>
                 </div>
             </div>
+
+            <div class="details-grid">
+                <div class="detail-row">
+                    <span class="detail-icon">📅</span>
+                    <span class="detail-label">Hari/Tanggal :</span>
+                    <span class="detail-value" id="displayTanggal">Senin, 16 November 2026 (20.00 WIB)</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-icon">⏰</span>
+                    <span class="detail-label">Pukul :</span>
+                    <span class="detail-value">20.00 WIB (Ba'da Isya' - Selesai)</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-icon">📍</span>
+                    <span class="detail-label">Lokasi :</span>
+                    <span class="detail-value">Pendopo Haji Hanafi Center, Menawan Merak Kec. Dempet Kab. Demak</span>
+                </div>
+            </div>
+
+            <div class="open-public-banner">TERBUKA UMUM</div>
         </div>
 
-        <!-- Footer -->
-        <div class="footer-section">
-            <span>Ikuti Informasi Kami</span>
-            <span class="social-media">@halawatuliman</span>
+        <!-- 4. Footer Bawah (HALAWA CREATIVE) -->
+        <div class="footer-bottom">
+            <div class="footer-present">Present by :</div>
+            <div class="footer-org">HALAWA CREATIVE</div>
         </div>
-
     </div>
 
+    <!-- SCRIPT INTERAKTIF -->
     <script>
         const inputTanggal = document.getElementById('inputTanggal');
         const displayTanggal = document.getElementById('displayTanggal');
-
         inputTanggal.addEventListener('input', function() {
-            const val = inputTanggal.value.trim();
-            displayTanggal.innerText = val !== "" ? val : "(Tanggal Belum Diisi)";
+            displayTanggal.innerText = inputTanggal.value.trim() !== "" ? inputTanggal.value : "Senin, 16 November 2026";
+        });
+
+        const inputShohibul = document.getElementById('inputShohibul');
+        const displayShohibul = document.getElementById('displayShohibul');
+        inputShohibul.addEventListener('input', function() {
+            displayShohibul.innerText = inputShohibul.value.trim() !== "" ? inputShohibul.value : "Masyayikh Majelis";
+        });
+
+        const uploadLogo = document.getElementById('uploadLogo');
+        const logoPreview = document.getElementById('logoPreview');
+        uploadLogo.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    logoPreview.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
         });
     </script>
 
